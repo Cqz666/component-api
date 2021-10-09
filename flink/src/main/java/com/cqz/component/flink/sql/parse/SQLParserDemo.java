@@ -1,5 +1,7 @@
 package com.cqz.component.flink.sql.parse;
 
+import com.cqz.component.flink.sql.utils.SQLStringUtil;
+import com.cqz.component.flink.sql.utils.Splitter;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.internal.TableEnvironmentInternal;
@@ -14,13 +16,23 @@ import java.util.Optional;
 public class SQLParserDemo {
     private static final Logger log = LoggerFactory.getLogger(SQLParserDemo.class);
 
+    private static final char SQL_DELIMITER = ';';
     public static final String MESSAGE_SQL_EXECUTION_ERROR = "Could not execute SQL statement.";
 
     public static void main(String[] args) {
-        String statement = "create table tab1(id int,name varchar)WITH('connector' = 'filesystem');";
-//        String statement = "insert into tb32 select * from tab1";
         SQLParserDemo demo = new SQLParserDemo();
-        demo.executeStatement(statement);
+//        String statement = "create table tab1(id int,name varchar)WITH('connector' = 'filesystem');";
+        String sql = "create table tab1(id int,name varchar)WITH('connector' = 'filesystem');" +
+                "\n" +
+                "insert into tb32 select * from tab1";
+//        String statement = "insert into tb32 select * from tab1";
+        String statement = SQLStringUtil.dealSqlComment(sql);
+        Splitter splitter = new Splitter(SQL_DELIMITER);
+        List<String> stmts = splitter.splitEscaped(statement);
+        for (String stmt : stmts) {
+            System.out.println(stmt);
+            demo.executeStatement(stmt);
+        }
     }
 
     private void executeStatement(String statement){
