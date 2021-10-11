@@ -8,6 +8,8 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.functions.AggregateFunction;
 
 public class FlinkUDAGG {
+    private static String path=FlinkUDAGG.class.getClassLoader().getResource("agg.txt").toString();
+
     public static void main(String[] args) {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -22,7 +24,7 @@ public class FlinkUDAGG {
 
         tableEnv.executeSql("CREATE TEMPORARY TABLE MyTable (myField String,`value` bigint,weight int)" +
                 "with('connector' = 'filesystem'," +
-                "'path' = 'D:\\Project\\component-api\\flink\\src\\main\\resources\\agg.txt'," +
+                "'path' = '"+path+"'," +
                 "'format' = 'csv'" +
                 ")");
 

@@ -10,6 +10,9 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 
 public class FlinkSQLDemo {
+
+    private static String path=FlinkSQLDemo.class.getClassLoader().getResource("data.txt").toString();
+
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
@@ -23,7 +26,7 @@ public class FlinkSQLDemo {
 
         tableEnv.executeSql("CREATE TEMPORARY TABLE MyTable (id int,myField String)" +
                 "with('connector' = 'filesystem'," +
-                "'path' = 'D:\\Project\\component-api\\flink\\src\\main\\resources\\data.txt'," +
+                "'path' = '"+path+"'," +
                 "'format' = 'csv'" +
                 ")");
 
