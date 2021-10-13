@@ -23,13 +23,13 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-java</artifactId>
             <version>${flink.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -43,7 +43,7 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-api-java-bridge_2.11</artifactId>
             <version>${flink.version}</version>
-            <!--            <scope>provided</scope>-->
+                        <scope>provided</scope>
         </dependency>
 
         <!--idea可以运行sql-->
@@ -51,7 +51,7 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-planner-blink_2.11</artifactId>
             <version>${flink.version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
         <!--Extension Dependencies -->
@@ -59,27 +59,27 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-common</artifactId>
             <version>${flink.version}</version>
-            <!--            <scope>provided</scope>-->
+                        <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-json</artifactId>
             <version>${flink.version}</version>
-            <!--            <scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
         <!-- Add connector dependencies here. They must be in the default scope (compile). -->
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-sql-connector-kafka_${scala.binary.version}</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
+<!--&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;            <groupId>org.apache.flink</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <version>${flink.version}</version>&ndash;&gt;-->
+<!--&lt;!&ndash;        </dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;            <groupId>org.apache.flink</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <artifactId>flink-sql-connector-kafka_${scala.binary.version}</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <version>${flink.version}</version>&ndash;&gt;-->
+<!--&lt;!&ndash;        </dependency>&ndash;&gt;-->
 
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -88,41 +88,41 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.bahir</groupId>
-            <artifactId>flink-connector-redis_2.11</artifactId>
-            <version>1.0</version>
-        </dependency>
+<!--&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;            <groupId>org.apache.bahir</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <artifactId>flink-connector-redis_2.11</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <version>1.0</version>&ndash;&gt;-->
+<!--&lt;!&ndash;        </dependency>&ndash;&gt;-->
 
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-elasticsearch6_2.11</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
+<!--&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;            <groupId>org.apache.flink</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <artifactId>flink-connector-elasticsearch6_2.11</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <version>${flink.version}</version>&ndash;&gt;-->
+<!--&lt;!&ndash;        </dependency>&ndash;&gt;-->
 
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-jdbc_${scala.binary.version}</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
+<!--&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;            <groupId>org.apache.flink</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <artifactId>flink-connector-jdbc_${scala.binary.version}</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <version>${flink.version}</version>&ndash;&gt;-->
+<!--&lt;!&ndash;        </dependency>&ndash;&gt;-->
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.44</version>
-        </dependency>
-        <!---format -->
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-csv</artifactId>
-            <version>1.13.2</version>
-        </dependency>
-        <!--推荐rocksdb的状态后端存储-->
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
+<!--&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;            <groupId>mysql</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <artifactId>mysql-connector-java</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <version>5.1.44</version>&ndash;&gt;-->
+<!--&lt;!&ndash;        </dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash;-format &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;            <groupId>org.apache.flink</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <artifactId>flink-csv</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <version>1.13.2</version>&ndash;&gt;-->
+<!--&lt;!&ndash;        </dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash;推荐rocksdb的状态后端存储&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;            <groupId>org.apache.flink</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;            <version>${flink.version}</version>&ndash;&gt;-->
+<!--&lt;!&ndash;        </dependency>&ndash;&gt;-->
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -174,7 +174,7 @@
                         </filters>
                         <transformers>
                             <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                <mainClass>com.cqz.flink.demo.StreamingJob</mainClass>
+                                <mainClass>com.cqz.component.flink.sql.client.Launcher</mainClass>
                             </transformer>
                         </transformers>
                     </configuration>
