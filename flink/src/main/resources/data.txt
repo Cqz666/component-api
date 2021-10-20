@@ -1,9 +1,0 @@
-1,qwertyuiop
-2,asdfghjkl
-3,zxcvbnm
-1,qwertyuiop
-2,asdfghjkl
-3,zxcvbnm
-1,qwertyuiop
-2,asdfghjkl
-3,zxcvbnm
