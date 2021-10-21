@@ -41,8 +41,10 @@ public class Launcher {
         Arrays.stream(args).forEach(arg -> LOG.info("{}", arg));
         LOG.info("-------------------------------------------");
 
-        String sqlpath = args[0];
-        String tmp = ArgsParser.getSQLFromFile(sqlpath);
+//        String sql = args[0];
+        String sqlpath=args[0];
+//        String tmp = ArgsParser.getSQLFromFile(sqlpath);
+        String tmp = ArgsParser.getSQLFromHdfsFile(sqlpath);
         String sql = URLDecoder.decode(tmp, StandardCharsets.UTF_8.name());
 
         System.out.println("-----------sql-----------");
