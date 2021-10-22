@@ -19,7 +19,7 @@
 package com.cqz.component.flink.sql.throwable;
 
 
-import static com.cqz.component.flink.sql.utils.SQLStringUtil.addLineNumber;
+import com.cqz.component.flink.sql.utils.SQLStringUtil;
 
 /**
  * @author chuixue
@@ -30,7 +30,7 @@ public class SqlParserException extends RuntimeException {
     public SqlParserException(String sql, String message, Throwable e) {
         super(
                 "\n---------- start---------\n"
-                        + addLineNumber(sql)
+                        + SQLStringUtil.addLineNumber(sql)
                         + "\n----------end--------- \n\n"
                         + message,
                 e);

@@ -4,9 +4,7 @@ import com.cqz.component.flink.sql.utils.HdfsUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 import static com.cqz.component.flink.sql.utils.HdfsUtil.HADOOP_CONF;
@@ -25,19 +23,23 @@ public class ArgsParser {
     }
 
     public static String getSQLFromHdfsFile(String pathname){
-        String value =null;
+        StringBuilder sb = new StringBuilder();
         Configuration hadoopConf = HdfsUtil.getHadoopConf(HADOOP_CONF);
-        try {
-            FileSystem fileSystem = HdfsUtil.getFileSystem(hadoopConf);
-            InputStream in = HdfsUtil.openFile(fileSystem, pathname);
-            byte[] fileContent = new byte[1024];
-            in.read(fileContent);
-            value = new String(fileContent, StandardCharsets.UTF_8);
-           System.out.println("read sql from hdfs :"+value);
+
+        try (FileSystem fileSystem = HdfsUtil.getFileSystem(hadoopConf);
+             InputStream in = HdfsUtil.openFile(fileSystem, pathname)){
+            byte[] buffer = new byte[1024];
+            int length ;
+            while ((length = in.read(buffer))!=-1){
+                String value = new String(buffer, 0,length,StandardCharsets.UTF_8);
+                sb.append(value);
+            }
+           System.out.println("read sql from hdfs :");
+            System.out.println(sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return value;
+        return sb.toString();
     }
 
     public static void main(String[] args) {

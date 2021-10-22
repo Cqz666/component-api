@@ -6,7 +6,7 @@ public class ArgsParserTest {
 
     @Test
     public void getSQLFromFile() throws Exception {
-        String sql = ArgsParser.getSQLFromFile("/home/cqz/1.com.cqz.component.flink.com.cqz.component.flink.sql");
+        String sql = ArgsParser.getSQLFromFile("/home/cqz/IdeaProjects/component-api/flink/flink-test/src/main/resources/data.txt");
         System.out.println(sql);
     }
 }

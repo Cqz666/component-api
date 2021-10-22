@@ -1,11 +1,7 @@
 package com.cqz.component.flink.sql.client;
 
 import com.cqz.component.flink.sql.utils.EnvironmentUtil;
-import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableEnvironment;
-import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 public class MyConnectorTestBatch {
 //    private static String DATA_PATH = MyConnectorTestBatch.class.getClassLoader().getResource("data.txt").toString();
