@@ -1,15 +1,38 @@
 package com.cqz.component.flink.sql.client;
 
 import com.cqz.component.flink.sql.utils.HdfsUtil;
+import org.apache.flink.util.FileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 import static com.cqz.component.flink.sql.utils.HdfsUtil.HADOOP_CONF;
 
 public class ArgsParser {
+
+    public static String getSqlFromFileByFlinkAPI(String path){
+        try {
+            byte[] bytes = FileUtils.readAllBytes(Paths.get(path));
+            return new String(bytes,StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<String> getSqlListFromFile(String path){
+        try {
+            return Files.readAllLines(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static String getSQLFromFile(String pathname) throws Exception {
         String value ;

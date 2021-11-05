@@ -2,6 +2,9 @@ package com.cqz.component.flink.sql.udf;
 
 import org.apache.flink.table.functions.ScalarFunction;
 
+/**
+ * Scalar Functions 标量函数
+ */
 public class SumFunction extends ScalarFunction {
 
     public Integer eval(Integer a, Integer b) {
@@ -9,7 +12,7 @@ public class SumFunction extends ScalarFunction {
     }
 
     public Integer eval(String a, String b) {
-        return Integer.valueOf(a) + Integer.valueOf(b);
+        return Integer.parseInt(a) + Integer.parseInt(b);
     }
 
     public Integer eval(Double... d) {

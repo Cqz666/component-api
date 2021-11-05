@@ -1,6 +1,6 @@
 package com.cqz.component.flink.sql.client;
 
-import com.cqz.component.flink.sql.utils.EnvironmentUtil;
+import com.cqz.component.flink.sql.utils.ExecutionEnvUtil;
 import org.apache.flink.table.api.TableEnvironment;
 
 public class MyConnectorTestBatch {
@@ -8,7 +8,7 @@ public class MyConnectorTestBatch {
 
     public static void main(String[] args) {
 
-        TableEnvironment tEnv = EnvironmentUtil.getBatchTableEnv();
+        TableEnvironment tEnv = ExecutionEnvUtil.getBatchTableEnv();
 
         String ddl = "CREATE TABLE tb_socket (id int,name String)" +
                 "with('connector' = 'filesystem'," +
