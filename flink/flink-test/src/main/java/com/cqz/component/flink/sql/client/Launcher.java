@@ -1,12 +1,10 @@
 package com.cqz.component.flink.sql.client;
 
-import com.cqz.component.flink.sql.parse.SqlCommandParser;
 import com.cqz.component.flink.sql.parse.SqlExecutionException;
 import com.cqz.component.flink.sql.throwable.SqlParserException;
 import com.cqz.component.flink.sql.utils.SQLStringUtil;
 import com.cqz.component.flink.sql.utils.Splitter;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.StatementSet;
 import org.apache.flink.table.api.Table;
@@ -14,45 +12,48 @@ import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.api.internal.TableEnvironmentInternal;
+import org.apache.flink.table.catalog.hive.HiveCatalog;
 import org.apache.flink.table.delegation.Parser;
 import org.apache.flink.table.operations.Operation;
 import org.apache.flink.table.operations.QueryOperation;
-import org.apache.flink.table.operations.command.SetOperation;
 import org.apache.flink.util.FlinkRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class Launcher {
     public static Logger LOG = LoggerFactory.getLogger(Launcher.class);
-
+    public static final String catalogName = "myhive";
+    public static final String databaseName = "flink_kafka";
+    public static final String hiveConfDir = "/usr/local/hive3/conf/";
 
     public static void main(String[] args) throws Exception {
         if (args.length<1){
-            System.out.println("there is not enough args,Usage sql udf");
+            System.out.println("there is not enough args,.Usage sql");
             return;
         }
         LOG.info("------------program params-------------------------");
         Arrays.stream(args).forEach(arg -> LOG.info("{}", arg));
         LOG.info("-------------------------------------------");
 
-//        String sql = args[0];
-        String sqlpath=args[0];
-        String sql = ArgsParser.getSQLFromFile(sqlpath);
+        String sql = args[0];
+//        String sqlpath=args[0];
+//        String tmp = ArgsParser.getSQLFromFile(sqlpath);
 //        String tmp = ArgsParser.getSQLFromHdfsFile(sqlpath);
 //        String sql = URLDecoder.decode(tmp, StandardCharsets.UTF_8.name());
-
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
-        env.setParallelism(1);
 
         System.out.println("-----------sql-----------");
         System.out.println(sql);
         System.out.println("------------sql----------");
 
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
+        env.setParallelism(1);
 //        registerCatalog(tEnv);
 
         exeSqlJob(env,tEnv,sql );
@@ -61,6 +62,12 @@ public class Launcher {
 
     }
 
+    public static void registerCatalog(StreamTableEnvironment tableEnv) {
+        HiveCatalog hiveCatalog = new HiveCatalog(catalogName, "data_platform_test", hiveConfDir);
+        tableEnv.registerCatalog(catalogName, hiveCatalog);
+        tableEnv.useCatalog("myhive");
+        tableEnv.useDatabase("data_platform_test");
+    }
 
     public static void exeSqlJob(
             StreamExecutionEnvironment env,
