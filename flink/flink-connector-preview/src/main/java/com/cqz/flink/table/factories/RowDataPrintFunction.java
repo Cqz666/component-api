@@ -13,16 +13,14 @@ public class RowDataPrintFunction extends RichSinkFunction<RowData> {
     private static final long serialVersionUID = 1L;
     private DynamicTableSink.DataStructureConverter converter;
     private  PrintSinkOutputWriter<String> writer;
-    private final Long numberOfRows;
     private final Long numberOfOutputsPerSecond;
     private transient int toOutput;
     private transient int outputSoFar;
     private transient long markTime = System.currentTimeMillis();
 
-    public RowDataPrintFunction(DynamicTableSink.DataStructureConverter converter, Long numberOfRows,Long numberOfOutputsPerSecond) {
+    public RowDataPrintFunction(DynamicTableSink.DataStructureConverter converter,String printIdentifier,Long numberOfOutputsPerSecond) {
         this.converter = converter;
-        this.writer = new PrintSinkOutputWriter<>();
-        this.numberOfRows = numberOfRows;
+        this.writer = new PrintSinkOutputWriter<>(printIdentifier,false);
         this.numberOfOutputsPerSecond =numberOfOutputsPerSecond;
     }
 

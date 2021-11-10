@@ -15,19 +15,19 @@ public class PreviewTableSinkFactory implements DynamicTableSinkFactory {
 
     public static final String IDENTIFIER = "my_preview";
 
-    public static final ConfigOption<Long> NUMBER_OF_ROWS =
-            key("number-of-rows")
-                    .longType()
-                    .noDefaultValue()
-                    .withDescription(
-                            "Total number of rows to emit. By default, the source is unbounded.");
-
     public static final ConfigOption<Long> MAX_NUMBER_OF_OUTPUTS_PER_SECOND =
             key("max-number-of-outputs-per-second")
                     .longType()
                     .noDefaultValue()
                     .withDescription(
                             "Max number of rows to print in one second.");
+
+    public static final ConfigOption<String> PRINT_IDENTIFIER =
+            key("print-identifier")
+                    .stringType()
+                    .noDefaultValue()
+                    .withDescription(
+                            "Message that identify print and is prefixed to the output of the value.");
 
     @Override
     public DynamicTableSink createDynamicTableSink(Context context) {
@@ -36,10 +36,10 @@ public class PreviewTableSinkFactory implements DynamicTableSinkFactory {
         ReadableConfig options = helper.getOptions();
         return new PreviewSink(
                 context.getCatalogTable().getResolvedSchema().toPhysicalRowDataType(),
-                options.getOptional(FactoryUtil.SINK_PARALLELISM).orElse(null),
-                options.get(NUMBER_OF_ROWS),
-                options.get(MAX_NUMBER_OF_OUTPUTS_PER_SECOND)
-        );
+                options.get(PRINT_IDENTIFIER),
+                options.get(MAX_NUMBER_OF_OUTPUTS_PER_SECOND),
+                options.getOptional(FactoryUtil.SINK_PARALLELISM).orElse(null)
+                );
     }
 
     @Override
@@ -55,9 +55,9 @@ public class PreviewTableSinkFactory implements DynamicTableSinkFactory {
     @Override
     public Set<ConfigOption<?>> optionalOptions() {
         Set<ConfigOption<?>> options = new HashSet<>();
-        options.add(FactoryUtil.SINK_PARALLELISM);
-        options.add(NUMBER_OF_ROWS);
+        options.add(PRINT_IDENTIFIER);
         options.add(MAX_NUMBER_OF_OUTPUTS_PER_SECOND);
+        options.add(FactoryUtil.SINK_PARALLELISM);
         return options;
     }
 

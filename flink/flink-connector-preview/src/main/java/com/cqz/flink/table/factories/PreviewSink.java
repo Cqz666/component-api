@@ -9,20 +9,20 @@ import org.apache.flink.types.RowKind;
 public class PreviewSink implements DynamicTableSink {
 
     private final DataType type;
+    private final String printIdentifier;
     private final Integer parallelism;
-    private final Long numberOfRows;
     private final Long numberOfOutputsPerSecond;
 
     public PreviewSink(
             DataType type,
-            Integer parallelism,
-            Long numberOfRows,
-            Long numberOfOutputsPerSecond
+            String printIdentifier,
+            Long numberOfOutputsPerSecond,
+            Integer parallelism
             ) {
         this.type = type;
-        this.parallelism = parallelism;
-        this.numberOfRows = numberOfRows;
+        this.printIdentifier = printIdentifier;
         this.numberOfOutputsPerSecond = numberOfOutputsPerSecond;
+        this.parallelism = parallelism;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class PreviewSink implements DynamicTableSink {
 //        return requestedMode;
         return ChangelogMode.newBuilder()
                 .addContainedKind(RowKind.INSERT)
-//                .addContainedKind(RowKind.UPDATE_BEFORE)
+                .addContainedKind(RowKind.UPDATE_BEFORE)
                 .addContainedKind(RowKind.DELETE)
                 .addContainedKind(RowKind.UPDATE_AFTER)
                 .build();
@@ -41,12 +41,12 @@ public class PreviewSink implements DynamicTableSink {
     public SinkRuntimeProvider getSinkRuntimeProvider(Context context) {
         DataStructureConverter converter = context.createDataStructureConverter(type);
         return SinkFunctionProvider.of(
-                new RowDataPrintFunction(converter,numberOfRows,numberOfOutputsPerSecond),parallelism);
+                new RowDataPrintFunction(converter,printIdentifier,numberOfOutputsPerSecond),parallelism);
     }
 
     @Override
     public DynamicTableSink copy() {
-        return new PreviewSink(type, parallelism,numberOfRows,numberOfOutputsPerSecond);
+        return new PreviewSink(type,printIdentifier,numberOfOutputsPerSecond, parallelism);
     }
 
     @Override
