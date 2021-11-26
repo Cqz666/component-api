@@ -58,6 +58,12 @@ public class ParseUDFNameHelper {
                 ")\n" +
                 "LEFT JOIN LATERAL TABLE(DynamicFieldSplitFunction(join_str, ' , ', ':', 'a,b,c,d,e')) AS T(event1, vid1, versionv1, uid1, app_version1) ON TRUE;";
 
+        String ddl = "create table a(id int);" +
+                "create table b(name int);" +
+                "create table c(age int);" +
+                "select * from a;" +
+                "select * from b";
+
         final SqlParser sqlParser = buildSqlParser(sqlText4);
 
         final List<SqlNode> sqlNodeList = sqlParser.parseStmtList().getList();
@@ -156,7 +162,7 @@ private static List<String> parseBasicCall(SqlBasicCall sqlBasicCall,List<String
         return udfs;
     }
 
-    private static SqlParser buildSqlParser(String sql) {
+    public static SqlParser buildSqlParser(String sql) {
         return SqlParser.create(sql, SqlParser.config()
                 .withParserFactory(FlinkSqlParserImpl.FACTORY)
                 .withQuoting(Quoting.BACK_TICK)

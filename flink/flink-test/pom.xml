@@ -17,7 +17,6 @@
             <groupId>com.cqz</groupId>
             <artifactId>flink-connector-preview</artifactId>
             <version>1.0-SNAPSHOT</version>
-<!--            <scope>provided</scope>-->
         </dependency>
         <!-- Apache Flink dependencies -->
         <!-- These dependencies are provided, because they should not be packaged into the JAR file. -->
