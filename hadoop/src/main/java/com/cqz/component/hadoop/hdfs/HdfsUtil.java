@@ -85,9 +85,9 @@ public class HdfsUtil {
      */
     public static Configuration getHadoopConf(String path) {
         Configuration hadoopConfig = new Configuration();
-        hadoopConfig.addResource(new Path(path + "core-site.xml"));
-        hadoopConfig.addResource(new Path(path + "hdfs-site.xml"));
-        hadoopConfig.addResource(new Path(path + "mapred-site.xml"));
+        hadoopConfig.addResource(new Path(path + "/core-site.xml"));
+        hadoopConfig.addResource(new Path(path + "/hdfs-site.xml"));
+        hadoopConfig.addResource(new Path(path + "/mapred-site.xml"));
         hadoopConfig.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 //        log.info("hadoopConfig：{}", hadoopConfig);
         return hadoopConfig;

@@ -15,6 +15,7 @@
         <module>flink-connector-preview</module>
         <module>flink-test</module>
         <module>flink-sql-udf</module>
+        <module>flink-connector-redis</module>
     </modules>
 
     <properties>
