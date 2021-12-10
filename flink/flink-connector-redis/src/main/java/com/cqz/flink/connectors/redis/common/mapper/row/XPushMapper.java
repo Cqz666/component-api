@@ -9,6 +9,7 @@ import org.apache.flink.table.data.GenericRowData;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class XPushMapper extends RowRedisMapper{
 
@@ -22,7 +23,10 @@ public class XPushMapper extends RowRedisMapper{
 
     public XPushMapper(ReadableConfig config) {
         super(RedisCommand.XPUSH, config);
+
         key = config.get(RedisOptions.XPUSH_KEY);
+        Objects.requireNonNull(key,"Redis xpush-key can not be null ");
+
     }
 
     @Override
