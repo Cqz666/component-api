@@ -64,6 +64,7 @@ public class RedisDynamicTableFactory implements DynamicTableSinkFactory {
         options.add(RedisOptions.FIELD_COLUMN);
         options.add(RedisOptions.PUT_IF_ABSENT);
         options.add(RedisOptions.KEY_TTL);
+        options.add(RedisOptions.WRITE_MAX_ROWS);
         return options;
     }
 }

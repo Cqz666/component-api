@@ -16,6 +16,9 @@ public class XPushMapper extends RowRedisMapper{
     public static final String OP = "op";
 
     private String key;
+    private Long writeMaxRows;
+
+    private transient int writeCount;
 
     public XPushMapper() {
         super(RedisCommand.XPUSH);
@@ -27,6 +30,8 @@ public class XPushMapper extends RowRedisMapper{
         key = config.get(RedisOptions.XPUSH_KEY);
         Objects.requireNonNull(key,"Redis xpush-key can not be null ");
 
+        writeMaxRows = config.get(RedisOptions.WRITE_MAX_ROWS);
+
     }
 
     @Override
@@ -36,13 +41,19 @@ public class XPushMapper extends RowRedisMapper{
 
     @Override
     public String getValueFromData(List<String> fields, GenericRowData row) {
-        String op  =row.getRowKind().shortString();
-        Map<String,String> map = new LinkedHashMap<>();
-        for (int i = 0; i < fields.size(); i++){
-            if (i==0) map.put(OP , op);
-            map.put(fields.get(i),String.valueOf(row.getField(i)));
+        if (writeMaxRows == null || writeCount < writeMaxRows){
+            writeCount++;
+            String op  =row.getRowKind().shortString();
+            Map<String,String> map = new LinkedHashMap<>();
+            for (int i = 0; i < fields.size(); i++){
+                if (i==0) map.put(OP , op);
+                map.put(fields.get(i),String.valueOf(row.getField(i)));
+            }
+            return JSONObject.toJSONString(map);
+        }else {
+            return null;
         }
-        return JSONObject.toJSONString(map);
+
     }
 
 }

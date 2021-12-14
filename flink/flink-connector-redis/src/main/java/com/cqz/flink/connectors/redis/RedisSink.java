@@ -132,7 +132,7 @@ public class RedisSink<IN> extends RichSinkFunction<IN> {
         switch (redisCommand) {
             case XPUSH:
                  value = redisSinkMapper.getValueFromData(fields, input);
-                this.redisCommandsContainer.lpush(key, value, ttl);
+                 if (value !=null ) this.redisCommandsContainer.lpush(key, value, ttl);
                 break;
             case LPUSH:
                 this.redisCommandsContainer.lpush(key, value, ttl);

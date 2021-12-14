@@ -134,4 +134,9 @@ public class RedisOptions {
             .noDefaultValue()
             .withDescription("Optional xpush-key for insert to redis");
 
+    public static final ConfigOption<Long> WRITE_MAX_ROWS = ConfigOptions
+            .key("write.max-rows")
+            .longType()
+            .noDefaultValue()
+            .withDescription("Optional write.max-rows for  insert to redis");
 }
