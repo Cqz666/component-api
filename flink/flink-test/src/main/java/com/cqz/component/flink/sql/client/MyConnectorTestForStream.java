@@ -46,13 +46,15 @@ public class MyConnectorTestForStream {
 //                "  'number-of-rows' = '10'" +
                 ")";
         String sql = "insert into tb_sink select order_number,price,order_time from tb_source";
+        String qry = "select order_number,price,order_time from tb_source";
         String count_sql = "insert into tb_sink_count select order_number,count(*) as cnt from tb_source group by order_number";
 //        String show_table ="show tables";
 //        String show_database ="show databases";
         //注册表
         tEnv.executeSql(source);
-        tEnv.executeSql(sink);
-        tEnv.executeSql(sql);
+//        tEnv.executeSql(sink);
+        TableResult result = tEnv.executeSql(qry);
+        result.print();
 //        TableResult result = tEnv.executeSql(show_table);
 //        result.print();
 //        TableResult result1 = tEnv.executeSql(show_database);

@@ -1,6 +1,6 @@
 package com.cqz.component.flink.sql.utils;
 
-import org.apache.flink.shaded.guava18.com.google.common.base.Strings;
+import com.google.common.base.Strings;
 import org.junit.Test;
 
 import java.util.List;
