@@ -1,14 +1,15 @@
-package com.cqz.component.flink.sql.udf;
+package com.cqz.component.flink.sql.parse;
 
 import org.apache.calcite.sql.*;
 import org.apache.calcite.sql.parser.SqlParseException;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.flink.sql.parser.ddl.SqlCreateTable;
 import org.apache.flink.sql.parser.ddl.SqlCreateView;
+import org.apache.flink.sql.parser.ddl.SqlTableColumn;
 
 import java.util.*;
 
-import static com.cqz.component.flink.sql.udf.ParseUDFNameHelper.buildSqlParser;
+import static com.cqz.component.flink.sql.parse.ParseUDFNameHelper.buildSqlParser;
 
 public class ParseMultipleChain {
 
@@ -18,6 +19,9 @@ public class ParseMultipleChain {
     private static List<String> TABLE_IN_VIEW = new ArrayList<>();
     //K=sink,v=[source1,source2...]
     private static Map<String,List<String>> TABLE_MAP = new HashMap<>();
+    //k=column,v=type
+    private static Map<String,Map<String,String>> TABLE_COLUMN_TYPE  = new HashMap<>();
+    private static String tablename ;
 
     public static void main(String[] args) throws SqlParseException {
         String case1="create table a(id int);" +
@@ -129,15 +133,84 @@ public class ParseMultipleChain {
                 "  WHERE event IS NOT NULL AND vid IS NOT NULL AND versionv IS NOT NULL AND uid IS NOT NULL AND `$app_version` IS NOT NULL AND uid <> ''\n" +
                 ")\n" +
                 "LEFT JOIN LATERAL TABLE(DynamicFieldSplitFunction(join_str, ' , ', ':', 'a,b,c,d,e')) AS T(event1, vid1, versionv1, uid1, app_version1) ON TRUE;";
+        String case6="CREATE TABLE gamebox_event(\n" +
+                "  `client_timestamp` BIGINT,\n" +
+                "  `$city` varchar,\n" +
+                "  `$network_type` varchar,\n" +
+                "  `event` varchar,\n" +
+                "  `uid` varchar,\n" +
+                "  `vid` varchar\n" +
+                ") WITH (\n" +
+                "  'connector' = 'kafka',\n" +
+                "  'topic' = 'gamebox_event',\n" +
+                "  'properties.bootstrap.servers' = '10.21.0.131:9092,10.21.0.132:9092,10.20.0.2:9092,10.20.0.3:9092',\n" +
+                "  'properties.group.id' = 'flinksql-clicks-topn',\n" +
+                "  'scan.startup.mode' = 'latest-offset',\n" +
+                "  'format' = 'json',\n" +
+                "  'json.ignore-parse-errors' = 'true'\n" +
+                ");\n" +
+                "\n" +
+                "\n" +
+                "CREATE TABLE sink_redis(\n" +
+                " uid varchar,\n" +
+                " vid varchar,\n" +
+                " $network_type varchar,\n" +
+                " $city varchar,\n" +
+                " client_timestamp BIGINT\n" +
+                ") WITH(\n" +
+                " 'connector'='redis',\n" +
+                " 'redis-mode'='cluster',\n" +
+                " 'cluster-nodes'='10.21.0.117:6390,10.21.0.118:6395,10.21.0.119:6396',\n" +
+                " 'command'='XPUSH',\n" +
+                " 'xpush-key'='job_id:sink_redis2',\n" +
+                " 'key-ttl'='1800',\n" +
+                " 'write.max-rows'='1000'\n" +
+                ");\n" +
+                "\n" +
+                "\n" +
+                "insert into sink_redis\n" +
+                "select\n" +
+                "uid,\n" +
+                "vid,\n" +
+                "$network_type,\n" +
+                "$city,\n" +
+                "client_timestamp\n" +
+                "from gamebox_event where event='ranking_show';\n";
+        String case7 = "CREATE TABLE gamebox_event(\n" +
+                "  `client_timestamp` BIGINT,\n" +
+                "  `$city` varchar,\n" +
+                "  `$network_type` varchar,\n" +
+                "  `event` varchar,\n" +
+                "  `uid` varchar,\n" +
+                "  `vid` varchar,\n" +
+                "   proctime as PROCTIME(),\n" +
+                "   event_time AS TO_TIMESTAMP(FROM_UNIXTIME(if(client_timestamp <> null, client_timestamp, UNIX_TIMESTAMP()),'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd HH:mm:ss'),\n" +
+                "   WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND\n"+
+                ") WITH (\n" +
+                "  'connector' = 'kafka',\n" +
+                "  'topic' = 'gamebox_event',\n" +
+                "  'properties.bootstrap.servers' = '10.21.0.131:9092,10.21.0.132:9092,10.20.0.2:9092,10.20.0.3:9092',\n" +
+                "  'properties.group.id' = 'flinksql-clicks-topn',\n" +
+                "  'scan.startup.mode' = 'latest-offset',\n" +
+                "  'format' = 'json',\n" +
+                "  'json.ignore-parse-errors' = 'true'\n" +
+                ");\n" +
+                "select\n" +
+                "uid,\n" +
+                "vid,\n" +
+                "$network_type,\n" +
+                "$city,\n" +
+                "client_timestamp\n" +
+                "from gamebox_event where event='ranking_show'";
 
-        final SqlParser sqlParser = buildSqlParser(case4);
+        final SqlParser sqlParser = buildSqlParser(case7);
         final List<SqlNode> sqlNodeList = sqlParser.parseStmtList().getList();
         parseSqlNodes(sqlNodeList);
 
         System.out.println(TABLE_IN_DDL.toString());
         System.out.println("--------------------------------");
         System.out.println("TABLE_MAP :"+TABLE_MAP.toString());
-
+        System.out.println("TABLE_COLUMN_TYPE:" +TABLE_COLUMN_TYPE.toString());
 
     }
 
@@ -148,6 +221,12 @@ public class ParseMultipleChain {
                 SqlCreateTable sqlCreateTable = (SqlCreateTable) sqlNode;
                 final String tableName = sqlCreateTable.getTableName().getSimple();
                 TABLE_IN_DDL.add(tableName);
+                SqlNodeList columnList = sqlCreateTable.getColumnList();
+                List<SqlNode> list = columnList.getList();
+                Map<String,String> columnType = new HashMap<>();
+                tablename = tableName;
+                TABLE_COLUMN_TYPE.put(tablename,columnType);
+                parseSqlNodes(list);
             }
             if (sqlNode instanceof SqlInsert){
                 SqlInsert sqlInsert = (SqlInsert) sqlNode;
@@ -164,6 +243,14 @@ public class ParseMultipleChain {
 
             if (sqlNode instanceof SqlCreateView){
                 TABLE_IN_VIEW = parseSqlView((SqlCreateView) sqlNode);
+            }
+            if (sqlNode instanceof SqlTableColumn.SqlRegularColumn){
+                SqlTableColumn.SqlRegularColumn sqlRegularColumn = (SqlTableColumn.SqlRegularColumn) sqlNode;
+                String name = sqlRegularColumn.getName().getSimple();
+                String type = sqlRegularColumn.getType().getTypeName().getSimple();
+                Map<String, String> map = TABLE_COLUMN_TYPE.get(tablename);
+                if (map !=null) map.put(name,type);
+
             }
         }
     }
@@ -182,6 +269,8 @@ public class ParseMultipleChain {
 
     private static void parseSqlSelects(SqlNode sqlnode){
         if (sqlnode instanceof SqlSelect){
+            String s = sqlnode.toString();
+            System.out.println(s);
             SqlSelect sqlSelect = (SqlSelect) sqlnode;
             SqlNode from = sqlSelect.getFrom();
             //无子查询

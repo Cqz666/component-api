@@ -1,4 +1,4 @@
-package com.cqz.component.flink.sql.udf;
+package com.cqz.component.flink.sql.parse;
 
 import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
