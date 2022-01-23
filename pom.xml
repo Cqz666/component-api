@@ -28,6 +28,7 @@
         <module>flink</module>
         <module>hadoop</module>
         <module>common</module>
+        <module>common-scala</module>
     </modules>
 
     <dependencies>
