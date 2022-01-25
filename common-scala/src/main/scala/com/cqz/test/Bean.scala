@@ -1,4 +1,4 @@
-package com.cqz
+package com.cqz.test
 
 import scala.beans.BeanProperty
 

@@ -1,4 +1,4 @@
-package com.cqz
+package com.cqz.test
 
 object Account {
   private var lastNum = 0

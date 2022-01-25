@@ -1,4 +1,4 @@
-package com.cqz
+package com.cqz.test
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer

@@ -1,4 +1,4 @@
-package com.cqz
+package com.cqz.test
 
 object ScalaObjectTest {
   def main(args: Array[String]): Unit = {

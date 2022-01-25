@@ -71,7 +71,11 @@ public class DataStreamInsertTest {
         genericRowData.setField(2, "150");
         DataStream<GenericRowData> dataStream = env.fromElements(genericRowData);
 
-        TableSchema tableSchema =  new TableSchema.Builder() .field("name", DataTypes.STRING().notNull()).field("subject", DataTypes.STRING()).field("score", DataTypes.INT()).build();
+        TableSchema tableSchema =  new TableSchema.Builder()
+                .field("name", DataTypes.STRING().notNull())
+                .field("subject", DataTypes.STRING())
+                .field("score", DataTypes.INT())
+                .build();
 
         FlinkJedisConfigBase conf = getLocalRedisClusterConfig();
         RedisSink redisSink = new RedisSink<>(conf, redisMapper, tableSchema);

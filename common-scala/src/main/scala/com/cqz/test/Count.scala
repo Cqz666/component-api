@@ -1,4 +1,4 @@
-package com.cqz
+package com.cqz.test
 
 class Count {
   private var value =0

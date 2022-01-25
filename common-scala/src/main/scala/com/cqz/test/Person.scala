@@ -1,4 +1,4 @@
-package com.cqz
+package com.cqz.test
 
 class Person {
   private var privateAge = 0
