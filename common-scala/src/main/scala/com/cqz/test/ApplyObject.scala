@@ -1,4 +1,4 @@
-package com.cqz
+package com.cqz.test
 
 class ApplyObject(val id:Int,val name:String) {
 
