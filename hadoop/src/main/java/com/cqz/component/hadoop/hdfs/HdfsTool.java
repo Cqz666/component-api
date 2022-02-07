@@ -62,7 +62,8 @@ public class HdfsTool {
 
     public static OutputStream createFile(FileSystem fs, String path) throws Exception {
         if (isExist(fs, path))
-            return appendFile(fs, path);
+            delete(fs, path);
+//            return appendFile(fs, path);
         logger.info("createFile：{}", path);
         if (fs instanceof LocalFileSystem) {
             return new FileOutputStream(new File(new URI(path)));

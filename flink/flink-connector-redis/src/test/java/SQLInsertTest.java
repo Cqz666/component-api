@@ -16,19 +16,18 @@ public class SQLInsertTest {
     @Test
     public void testNoPrimaryKeyInsertSQL() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
         EnvironmentSettings environmentSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env, environmentSettings);
 
-        String ddl = "create table sink_redis(id INT,name VARCHAR, age INT, country VARCHAR) with ( 'connector'='redis', " +
+        String ddl = "create table sink_redis(id INT,name VARCHAR, age INT, country VARCHAR) " +
+                "with ( 'connector'='redis', " +
                 "'host'='127.0.0.1'," +
                 "'port'='6380', " +
                 "'redis-mode'='single'," +
                 "'xpush-key'='job_id:sink_table'," +
-                "'key-ttl'='60','" +
-//                "'key-column'='id','" +
-//                "'value-column'='name','" +
-                REDIS_COMMAND + "'='" + RedisCommand.XPUSH + "')" ;
+                "'key-ttl'='60'," +
+                "'command'='XPUSH'" +
+                ")" ;
 
         tEnv.executeSql(ddl);
         String sql = " insert into sink_redis select * from (values (2,'JackMa',50, 'CHINA'))";
@@ -39,7 +38,7 @@ public class SQLInsertTest {
         System.out.println(sql);
 
         Jedis jedis = new Jedis("127.0.0.1", 6380);
-        String rpop = jedis.rpop("job_id:sink_table_name");
+        String rpop = jedis.rpop("job_id:sink_table");
         System.out.println(rpop);
     }
 

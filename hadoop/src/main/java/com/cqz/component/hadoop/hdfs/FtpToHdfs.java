@@ -4,8 +4,9 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
-import java.io.IOException;
-import java.io.OutputStream;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static com.cqz.component.hadoop.hdfs.HdfsTool.getFileSystem;
@@ -23,7 +24,8 @@ public class FtpToHdfs {
         String ftpPath = args[0];
         String fileName = args[1];
         String hdfsPath = args[2];
-
+        String user = args[3];
+        if (user!=null) HdfsTool.setHadoopUser(user);
          FileSystem fileSystem = getHdfsFileSystem();
 
          OutputStream out = HdfsTool.createFile(fileSystem, hdfsPath);
@@ -63,14 +65,51 @@ public class FtpToHdfs {
                 throw new RuntimeException("文件不存在或者文件已被删除");
             } else {
                 // 绑定输出流下载文件
-                flag = ftp.retrieveFile(file.getName(), out);
-                out.flush();
-                out.close();
+//                flag = ftp.retrieveFile(file.getName(), out);
+
+                BufferedWriter bw = new BufferedWriter(
+                        new OutputStreamWriter(out, StandardCharsets.UTF_8));
+                InputStream in = ftp.retrieveFileStream(file.getName());
+
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(in, StandardCharsets.UTF_8));
+                String line ;
+                int cnt  = 0;
+                while ((line = br.readLine())!=null){
+                    System.out.println(line);
+                    if (cnt != 0){
+                        bw.write(line + "\n");
+                    }
+                    cnt++;
+                }
+                flag=true;
+
+                br.close();
+                bw.flush();
+                bw.close();
+
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            disconnect(ftp);
         }
         return flag;
+    }
+
+    public static void disconnect(FTPClient ftp) {
+        try {
+            ftp.logout();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (ftp.isConnected()) {
+                try {
+                    ftp.disconnect();
+                } catch (IOException ignored) {
+                }
+            }
+        }
     }
 
 }

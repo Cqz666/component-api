@@ -41,6 +41,8 @@ public class RedisDynamicTableFactory implements DynamicTableSinkFactory {
     @Override
     public Set<ConfigOption<?>> requiredOptions() {
         final Set<ConfigOption<?>> options = new HashSet<>();
+        options.add(RedisOptions.REDISMODE);
+        options.add(RedisOptions.COMMAND);
         return options;
     }
 
@@ -56,8 +58,6 @@ public class RedisDynamicTableFactory implements DynamicTableSinkFactory {
         options.add(RedisOptions.PASSWORD);
         options.add(RedisOptions.TIMEOUT);
         options.add(RedisOptions.MINIDLE);
-        options.add(RedisOptions.COMMAND);
-        options.add(RedisOptions.REDISMODE);
         options.add(RedisOptions.XPUSH_KEY);
         options.add(RedisOptions.KEY_COLUMN);
         options.add(RedisOptions.VALUE_COLUMN);
