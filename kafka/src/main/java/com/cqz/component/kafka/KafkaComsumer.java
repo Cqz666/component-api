@@ -26,7 +26,8 @@ public class KafkaComsumer {
 
     private static Properties buildConsumerProperties(){
         Properties props = new Properties();
-        props.put("bootstrap.servers", "172.21.0.3:9092");
+        //docker host ip
+        props.put("bootstrap.servers", "172.21.0.2:9092");
         props.put("group.id","idea-test-group");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");

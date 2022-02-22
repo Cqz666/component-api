@@ -1,0 +1,22 @@
+// 点击记录Topic
+{"userID": "user_3", "eventTime": "2022-02-18 18:10:00", "eventType": "click", "pageID": "page_1"}
+
+// 浏览记录Topic
+{"userID": "user_2", "eventTime": "2022-02-18 17:19:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_2", "eventTime": "2022-02-18 17:20:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_2", "eventTime": "2022-02-18 17:22:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_2", "eventTime": "2022-02-18 17:26:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_2", "eventTime": "2022-02-18 17:30:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_2", "eventTime": "2022-02-18 17:31:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_2", "eventTime": "2022-02-18 17:35:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_2", "eventTime": "2022-02-18 17:40:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_2", "eventTime": "2022-02-18 17:45:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+
+{"userID": "user_3", "eventTime": "2022-02-18 17:50:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_3", "eventTime": "2022-02-18 17:55:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+{"userID": "user_3", "eventTime": "2022-02-18 18:50:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+
+
+{"userID": "user_6", "eventTime": "2022-02-18 18:45:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
+
+{"userID": "user_5", "eventTime": "2022-02-18 19:30:00", "eventType": "browse", "productID": "product_1", "productPrice": 10}
