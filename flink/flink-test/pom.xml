@@ -76,7 +76,7 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-csv</artifactId>
             <version>${flink.version}</version>
-            <scope>provided</scope>
+<!--            <scope>provided</scope>-->
         </dependency>
 
         <!-- Add connector dependencies here. They must be in the default scope (compile). -->
@@ -234,7 +234,7 @@
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.cqz.component.flink.sql.api.IntervalJoin</mainClass>
+                                    <mainClass>com.cqz.component.flink.api.interval_join.datastream.IntervalJoinByDataStream</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
