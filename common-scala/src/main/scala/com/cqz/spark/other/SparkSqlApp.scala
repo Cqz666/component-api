@@ -1,4 +1,4 @@
-package com.cqz.spark
+package com.cqz.spark.other
 
 import java.io.File
 

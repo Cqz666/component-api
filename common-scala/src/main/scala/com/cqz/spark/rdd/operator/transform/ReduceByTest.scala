@@ -1,4 +1,4 @@
-package com.cqz.rdd.operator.transform
+package com.cqz.spark.rdd.operator.transform
 
 import org.apache.spark.{HashPartitioner, SparkConf, SparkContext}
 import org.apache.spark.rdd.RDD
