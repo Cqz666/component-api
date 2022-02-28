@@ -1,9 +1,9 @@
-package com.cqz.rdd.operator.transform
+package com.cqz.spark.rdd.operator.transform
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
-object Aggregate2Test {
+object CombineByKeyTest {
   def main(args: Array[String]): Unit = {
     val sparkconf = new SparkConf().setMaster("local[*]").setAppName("a")
     val sc = new SparkContext(sparkconf)
@@ -11,7 +11,10 @@ object Aggregate2Test {
       ("a", 1), ("a", 2), ("b", 3),
         ("b", 4), ("b", 5), ("a", 6)
     ),2)
-    val tmp: RDD[(String, (Int, Int))] = in.aggregateByKey((0, 0))(
+    val tmp: RDD[(String, (Int, Int))] = in.combineByKey(
+      v=>{
+        (v,1)
+      },
       (t, v) => {
         (t._1 + v, t._2 + 1)
       },

@@ -1,4 +1,4 @@
-package com.cqz.spark
+package com.cqz.spark.other
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
