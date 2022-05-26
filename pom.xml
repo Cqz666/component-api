@@ -30,6 +30,7 @@
         <module>common</module>
         <module>common-scala</module>
         <module>kafka</module>
+        <module>iceberg</module>
     </modules>
 
     <dependencies>
