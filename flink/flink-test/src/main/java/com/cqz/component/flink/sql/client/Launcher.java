@@ -20,8 +20,6 @@ import org.apache.flink.util.FlinkRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +40,7 @@ public class Launcher {
         LOG.info("-------------------------------------------");
 
         String sql = args[0];
-//        String sqlpath=args[0];
+ //        String sqlpath=args[0];
 //        String tmp = ArgsParser.getSQLFromFile(sqlpath);
 //        String tmp = ArgsParser.getSQLFromHdfsFile(sqlpath);
 //        String sql = URLDecoder.decode(tmp, StandardCharsets.UTF_8.name());

@@ -1,5 +1,6 @@
 package com.cqz.component.flink.sql.parse;
 
+import com.cqz.component.flink.sql.utils.SqlUtils;
 import org.apache.calcite.sql.*;
 import org.apache.calcite.sql.parser.SqlParseException;
 import org.apache.calcite.sql.parser.SqlParser;
@@ -139,7 +140,9 @@ public class ParseMultipleChain {
                 "  `$network_type` varchar,\n" +
                 "  `event` varchar,\n" +
                 "  `uid` varchar,\n" +
-                "  `vid` varchar\n" +
+                "  `vid` varchar,\n" +
+                "   event_time AS TO_TIMESTAMP(FROM_UNIXTIME(if(client_timestamp <> null, client_timestamp, UNIX_TIMESTAMP()),'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd HH:mm:ss'),\n" +
+                "   WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND\n"+
                 ") WITH (\n" +
                 "  'connector' = 'kafka',\n" +
                 "  'topic' = 'gamebox_event',\n" +
@@ -170,11 +173,12 @@ public class ParseMultipleChain {
                 "\n" +
                 "insert into sink_redis\n" +
                 "select\n" +
-                "uid,\n" +
-                "vid,\n" +
-                "$network_type,\n" +
-                "$city,\n" +
-                "client_timestamp\n" +
+                "*\n" +
+//                "uid,\n" +
+//                "vid,\n" +
+//                "$network_type,\n" +
+//                "$city,\n" +
+//                "client_timestamp\n" +
                 "from gamebox_event where event='ranking_show';\n";
         String case7 = "CREATE TABLE gamebox_event(\n" +
                 "  `client_timestamp` BIGINT,\n" +
@@ -183,9 +187,9 @@ public class ParseMultipleChain {
                 "  `event` varchar,\n" +
                 "  `uid` varchar,\n" +
                 "  `vid` varchar,\n" +
-                "   proctime as PROCTIME(),\n" +
-                "   event_time AS TO_TIMESTAMP(FROM_UNIXTIME(if(client_timestamp <> null, client_timestamp, UNIX_TIMESTAMP()),'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd HH:mm:ss'),\n" +
-                "   WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND\n"+
+//                "   proctime as PROCTIME(),\n" +
+                "   ts AS TO_TIMESTAMP(FROM_UNIXTIME(if(client_timestamp <> null, client_timestamp, UNIX_TIMESTAMP()),'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd HH:mm:ss'),\n" +
+                "   WATERMARK FOR ts AS ts - INTERVAL '5' SECOND\n"+
                 ") WITH (\n" +
                 "  'connector' = 'kafka',\n" +
                 "  'topic' = 'gamebox_event',\n" +
@@ -196,14 +200,53 @@ public class ParseMultipleChain {
                 "  'json.ignore-parse-errors' = 'true'\n" +
                 ");\n" +
                 "select\n" +
-                "uid,\n" +
-                "vid,\n" +
-                "$network_type,\n" +
-                "$city,\n" +
-                "client_timestamp\n" +
+                "* \n" +
+//                "uid,\n" +
+//                "vid,\n" +
+//                "$network_type,\n" +
+//                "$city,\n" +
+//                "client_timestamp\n" +
                 "from gamebox_event where event='ranking_show'";
 
-        final SqlParser sqlParser = buildSqlParser(case7);
+        String windowTVF = "CREATE TABLE gamebox_ads_clicks( \n" +
+                "  `event` STRING, \n" +
+                "  `receive_timestamp` BIGINT,\n" +
+                "  `client_timestamp` BIGINT, \n" +
+                "  `link_channel` STRING, \n" +
+                "   event_time AS TO_TIMESTAMP(FROM_UNIXTIME(if(client_timestamp <> null, client_timestamp, UNIX_TIMESTAMP()),'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd HH:mm:ss'),\n" +
+                "   WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND\n" +
+                ") WITH ( \n" +
+                "  'connector' = 'kafka',        \n" +
+                "  'topic' = 'gamebox_event', \n" +
+                "  'properties.bootstrap.servers' = '10.21.0.131:9092,10.21.0.132:9092,10.20.0.2:9092,10.20.0.3:9092', \n" +
+                "  'properties.group.id' = 'data-platform-flink-sql-test', \n" +
+                "  'scan.startup.mode' = 'latest-offset',\n" +
+                "  'format' = 'json',\n" +
+                "  'json.ignore-parse-errors' = 'true'\n" +
+                ");\n" +
+                "\n" +
+                "CREATE TABLE tumble_output(\n" +
+                "  window_start TIMESTAMP,\n" +
+                "  window_end TIMESTAMP,\n" +
+                "  clicks BIGINT\n" +
+                ")with(\n" +
+                "  'connector'='print',\n" +
+                "  'print-identifier'='tumble'\n" +
+                ");\n" +
+                "\n" +
+                "insert into tumble_output\n" +
+                "select\n" +
+                "window_start,\n" +
+                "window_end,\n" +
+                "count(link_channel)\n" +
+                "from TABLE(TUMBLE(TABLE gamebox_ads_clicks,DESCRIPTOR(event_time),INTERVAL '1' MINUTE))\n" +
+                "where event='market_link_click' \n" +
+                "group by window_start,window_end;";
+
+        String sqlfile = "/home/cqz/IdeaProjects/component-api/flink/flink-sql-udf/src/main/resources/demo3.sql";
+        String sqlText = SqlUtils.getSqlText(sqlfile);
+        System.out.println(sqlText);
+        final SqlParser sqlParser = buildSqlParser(sqlText);
         final List<SqlNode> sqlNodeList = sqlParser.parseStmtList().getList();
         parseSqlNodes(sqlNodeList);
 
