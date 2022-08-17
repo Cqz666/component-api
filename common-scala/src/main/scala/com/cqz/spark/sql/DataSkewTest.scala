@@ -17,13 +17,8 @@ object DataSkewTest {
 
     spark.sql("select id,value,concat(id, cast(round(rand() * 10000) as int)%3) as new_id from a").createTempView("new_a")
     spark.sql("select * from new_a").show()
-
     spark.udf.register("newArray",(size: Int)=>{
-      val buf = ArrayBuffer[Int]()
-      for (a <-0 until  size){
-        buf+=a
-      }
-      buf.toArray
+      Array.range(0,size)
     })
     spark.sql("select newArray(3)").show()
 
