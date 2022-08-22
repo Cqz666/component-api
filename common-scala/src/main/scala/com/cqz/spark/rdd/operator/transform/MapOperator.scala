@@ -13,6 +13,8 @@ object MapOperator {
     value.collect().foreach(println)
     value2.collect().foreach(println)
 
+    println(Math.round(142.857142857143 * 100).toDouble / 100.toDouble)
+
     sc.stop()
 
   }

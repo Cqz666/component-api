@@ -22,6 +22,9 @@ public class OperatorStateDemo {
         env.setParallelism(1);
         //不开启checkpoint情况下，如果重启会导致重复消费
         env.enableCheckpointing(1000);
+        env.getCheckpointConfig().setCheckpointTimeout(100);
+//        env.getCheckpointConfig().setFailOnCheckpointingErrors(false);
+//        env.getCheckpointConfig().setTolerableCheckpointFailureNumber(1);
         env.setStateBackend(new FsStateBackend("file:///home/cqz/tmp/checkpoint"));
         env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
         env.getCheckpointConfig().enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
@@ -62,9 +65,9 @@ public class OperatorStateDemo {
             while (flag){
                 offset += 1;
                 int id = getRuntimeContext().getIndexOfThisSubtask();
+//                System.out.println("分区:"+id+"消费到的offset位置为:" + offset);
                 ctx.collect("分区:"+id+"消费到的offset位置为:" + offset);//1 2 3 4 5 6
-                //Thread.sleep(1000);
-                TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(1);
                 if(offset % 5 == 0){
                     System.out.println("程序遇到异常了.....");
                     throw new Exception("程序遇到异常了.....");
@@ -86,6 +89,7 @@ public class OperatorStateDemo {
             offsetState.clear();//清理内存中存储的offset到Checkpoint中
             //-6.将offset存入State中
             offsetState.add(offset);
+            System.out.println("当前状态："+offset);
         }
     }
 }
