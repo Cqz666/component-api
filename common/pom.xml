@@ -113,7 +113,7 @@
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.cqz.component.common.redis.FeatureJedisTest</mainClass>
+                                    <mainClass>com.cqz.component.common.utils.FeatureJedisTest</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

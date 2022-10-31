@@ -94,6 +94,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-cep_2.11</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
         <!--        <dependency>-->
         <!--            <groupId>org.apache.bahir</groupId>-->
         <!--            <artifactId>flink-connector-redis_2.11</artifactId>-->
@@ -196,6 +202,12 @@
             <version>8.0.20</version>
         </dependency>
 
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -246,6 +258,8 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.cqz.component.flink.job.ExceptionsTestJob</mainClass>
                                 </transformer>
+                                <!-- The service transformer is needed to merge META-INF/services files -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
                         </configuration>
                     </execution>
