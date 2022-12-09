@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "com.cqz.protobuf";
+option java_outer_classname = "ConfigProto";
+
+message DogConfig {
+  string name = 1;
+  int32 age = 2;
+  bool adopted = 3;
+}
