@@ -9,6 +9,9 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.source.SourceFunction;
+
+import java.util.Random;
 
 public class KeyedStateDemo {
     public static void main(String[] args) throws Exception {
@@ -17,14 +20,16 @@ public class KeyedStateDemo {
         env.setParallelism(1);//方便观察
 
         //2.Source
-        DataStreamSource<Tuple2<String, Long>> tupleDS = env.fromElements(
-                Tuple2.of("北京", 1L),
-                Tuple2.of("上海", 2L),
-                Tuple2.of("北京", 6L),
-                Tuple2.of("上海", 8L),
-                Tuple2.of("北京", 3L),
-                Tuple2.of("上海", 4L)
-        );
+//        DataStreamSource<Tuple2<String, Long>> tupleDS = env.fromElements(
+//                Tuple2.of("北京", 1L),
+//                Tuple2.of("上海", 2L),
+//                Tuple2.of("北京", 6L),
+//                Tuple2.of("上海", 8L),
+//                Tuple2.of("北京", 3L),
+//                Tuple2.of("上海", 4L)
+//        );
+
+        DataStreamSource<Tuple2<String, Long>> tupleDS = env.addSource(new UserDefinedSource());
 
         //3.Transformation
         //使用KeyState中的ValueState获取流数据中的最大值(实际中直接使用maxBy即可)
@@ -67,11 +72,32 @@ public class KeyedStateDemo {
 
 
         //4.Sink
-        result.print("-----");
+//        result.print("-----");
         result2.print("====");
 
         //5.execute
         env.execute();
+    }
+
+    private static class UserDefinedSource implements SourceFunction<Tuple2<String, Long>> {
+
+        private volatile boolean isCancel;
+        private static final String city[] = {"北京","上海","广州","深圳"};
+
+        @Override
+        public void run(SourceContext<Tuple2<String, Long>> sourceContext) throws Exception {
+            Random random = new Random();
+            while (!this.isCancel) {
+                int i = random.nextInt(4);
+                long l = random.nextInt(100000);
+                sourceContext.collect(Tuple2.of(city[i], l));
+                Thread.sleep(1000L);
+            }
+        }
+        @Override
+        public void cancel() {
+            this.isCancel = true;
+        }
     }
 
 }

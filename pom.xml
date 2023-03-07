@@ -31,6 +31,7 @@
         <module>common-scala</module>
         <module>kafka</module>
         <module>iceberg</module>
+        <module>leetcode</module>
     </modules>
 
     <dependencies>

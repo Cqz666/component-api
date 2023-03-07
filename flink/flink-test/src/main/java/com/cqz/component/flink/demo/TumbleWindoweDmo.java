@@ -2,7 +2,7 @@ package com.cqz.component.flink.demo;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.java.tuple.Tuple4;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
@@ -13,8 +13,15 @@ import java.util.Random;
 
 public class TumbleWindoweDmo {
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
+        ParameterTool parameterTool = ParameterTool.fromArgs(args);
+        String a = parameterTool.get("batchSize");
+        String b = parameterTool.get("timeFlushInterval");
+        String c = parameterTool.get("maxFlushInterVal");
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
 
         WatermarkStrategy<Tuple4<String, String, Integer, Long>> tuple4WatermarkStrategy =
                 WatermarkStrategy.<Tuple4<String, String, Integer, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(5))

@@ -98,6 +98,8 @@ public class FlinkTimerDemo {
             //如一个订单进来:<订单id, 2020-10-10 12:00:00>
             //那么该订单应该在12:00:00 + 5s 的时候超时!
             //在订单进来的时候设置一个定时器,在订单时间 + interval的时候触发!!!
+            long triggerTime = value.f2 + interval;
+            System.out.println("注册一个定时器，"+triggerTime+"触发！value="+value);
             ctx.timerService().registerProcessingTimeTimer(value.f2 + interval);
         }
 
@@ -107,6 +109,7 @@ public class FlinkTimerDemo {
             //能够执行到这里说明订单超时了!超时了得去看看订单是否评价了(实际中应该要调用外部接口/方法查订单系统!,我们这里没有,所以模拟一下)
             //没有评价才给默认好评!并直接输出提示!
             //已经评价了,直接输出提示!
+            System.out.println("定时器触发，"+timestamp+"，当前KEY="+ctx.getCurrentKey());
             Iterator<Map.Entry<String, Long>> iterator = mapState.iterator();
             while (iterator.hasNext()) {
                 Map.Entry<String, Long> entry = iterator.next();

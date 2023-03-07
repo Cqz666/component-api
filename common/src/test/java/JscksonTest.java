@@ -1,5 +1,3 @@
-package com.cqz.component.common.utils;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -26,6 +24,12 @@ public class JscksonTest {
         System.out.println(++pos);
 
         System.out.println(l);
+
+        String[] split = "105794#_#_#_1#_1".split("#_",-1);
+        System.out.println(split.length);
+        for (String s : split) {
+            System.out.println("s:"+s);
+        }
 
     }
 }

@@ -12,7 +12,8 @@ public class TraceTest {
     public static void main(String[] args) throws Exception {
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
         Configuration configuration = Configuration.fromMap(parameterTool.toMap());
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(configuration);
+//        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(configuration);
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
         env.disableOperatorChaining();
         DataStream<Tuple2<String, Long>> source = env.addSource(new MockSource());

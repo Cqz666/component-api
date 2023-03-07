@@ -1,5 +1,3 @@
-package com.cqz.component.common.utils;
-
 import org.apache.commons.math3.util.ArithmeticUtils;
 
 import java.text.SimpleDateFormat;

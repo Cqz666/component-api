@@ -11,6 +11,7 @@ import java.util.List;
 public class Example {
     private static final Double DEFAULT_DOUBLE = 12.345;
     private static final String KUDU_MASTERS = "10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051";
+    public static final String KUDU_MASTERS_LOCAL = "localhost:7051,localhost:7151,localhost:7251";
 
     static void createExampleTable(KuduClient client, String tableName)  throws KuduException {
         // Set up a simple schema.
@@ -142,11 +143,11 @@ public class Example {
 
     public static void main(String[] args) {
         System.out.println("-----------------------------------------------");
-        System.out.println("Will try to connect to Kudu master(s) at " + KUDU_MASTERS);
+        System.out.println("Will try to connect to Kudu master(s) at " + KUDU_MASTERS_LOCAL);
         System.out.println("Run with -DkuduMasters=master-0:port,master-1:port,... to override.");
         System.out.println("-----------------------------------------------");
         String tableName = "java_example-" + System.currentTimeMillis();
-        KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTERS).build();
+        KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTERS_LOCAL).build();
 
         try {
             createExampleTable(client, tableName);
@@ -166,8 +167,8 @@ public class Example {
             e.printStackTrace();
         } finally {
             try {
-                client.deleteTable(tableName);
-                System.out.println("Deleted the table");
+//                client.deleteTable(tableName);
+//                System.out.println("Deleted the table");
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
