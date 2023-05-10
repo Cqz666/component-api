@@ -37,9 +37,9 @@ public class KafkaComsumer {
 
     private static Properties buildConsumerProperties(){
         Properties props = new Properties();
-        props.put("bootstrap.servers", "10.0.0.194:9092,10.0.0.195:9092,10.0.0.199:9092");
+        //props.put("bootstrap.servers", "10.0.0.194:9092,10.0.0.195:9092,10.0.0.199:9092");
 //        props.put("bootstrap.servers", "10.0.0.196:9092,10.0.0.197:9092,10.0.0.198:9092");
-//        props.put("bootstrap.servers", "172.21.0.3:9092");
+        props.put("bootstrap.servers", "172.21.0.3:9092");
         props.put("group.id","mytest-group");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
